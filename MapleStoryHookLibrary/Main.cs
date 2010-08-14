@@ -64,34 +64,11 @@ namespace MapleStoryHooks
                 // Call Host
                 Interface.IsInstalled(RemoteHooking.GetCurrentProcessId());
 
-                LocalHook.EnableRIPRelocation();
+                LocalHook.EnableRIPRelocation(); // no idea what this does
 
-                string OutPacketInitPattern = "B8??????00E8??????005151568BF183660400";
-                string EncodeBytePattern = "568BF16A01E8????????8B4E088B4604";
-                string EncodeShortPattern = "568BF16A02E8????????8B4E088B4604";
-                string EncodeIntPattern = "568BF16A04E8????????8B4E088B4604";
-                
-                Scanner scanner = new Scanner(0xFFFFFF);
-                EncodeByteAddress = scanner.FindPattern(EncodeBytePattern, 0);
-                EncodeShortAddress = scanner.FindPattern(EncodeShortPattern, 0);
-                EncodeIntAddress = scanner.FindPattern(EncodeIntPattern, 0);
-                OutPacketInitAddress = scanner.FindPattern(OutPacketInitPattern, 0);
+                //LoadAddresses();
 
-
-                OutPacketInitOriginal = (DOutPacketInit)Marshal.GetDelegateForFunctionPointer(OutPacketInitAddress, typeof(DOutPacketInit));
-                EncodeByteOriginal = (DEncodeByte)Marshal.GetDelegateForFunctionPointer(EncodeByteAddress, typeof(DEncodeByte));
-                EncodeShortOriginal = (DEncodeShort)Marshal.GetDelegateForFunctionPointer(EncodeShortAddress, typeof(DEncodeShort));
-                EncodeIntOriginal = (DEncodeInt)Marshal.GetDelegateForFunctionPointer(EncodeIntAddress, typeof(DEncodeInt));
-                EncodeBufferOriginal = (DEncodeBuffer)Marshal.GetDelegateForFunctionPointer(EncodeBufferAddress, typeof(DEncodeBuffer));
-                EncodeStringOriginal = (DEncodeString)Marshal.GetDelegateForFunctionPointer(EncodeStringAddress, typeof(DEncodeString));
-
-                DecodeByteOriginal = (DDecodeByte)Marshal.GetDelegateForFunctionPointer(DecodeByteAddress, typeof(DDecodeByte));
-                DecodeShortOriginal = (DDecodeShort)Marshal.GetDelegateForFunctionPointer(DecodeShortAddress, typeof(DDecodeShort));
-                DecodeIntOriginal = (DDecodeInt)Marshal.GetDelegateForFunctionPointer(DecodeIntAddress, typeof(DDecodeInt));
-                DecodeBufferOriginal = (DDecodeBuffer)Marshal.GetDelegateForFunctionPointer(DecodeBufferAddress, typeof(DDecodeBuffer));
-                DecodeStringOriginal = (DDecodeString)Marshal.GetDelegateForFunctionPointer(DecodeStringAddress, typeof(DDecodeString));
-
-                SendPacketOriginal = (DSendPacket)Marshal.GetDelegateForFunctionPointer(SendPacketAddress, typeof(DSendPacket));
+                LoadOriginalFunctions();
 
                 hooks = new List<LocalHook>();
 
@@ -108,7 +85,6 @@ namespace MapleStoryHooks
                 hooks.Add(LocalHook.Create(DecodeBufferAddress, new DDecodeBuffer(form.DecodeBufferHooked), this));
                 hooks.Add(LocalHook.Create(DecodeStringAddress, new DDecodeString(form.DecodeStringHooked), this));
 
-
                 //hooks.Add(LocalHook.Create(SendPacketAddress, new DSendPacket(form.SendPacketHooked), this));
 
 
@@ -124,6 +100,38 @@ namespace MapleStoryHooks
                 Interface.WriteConsole("ERROR: " + e);
             }
 
+        }
+
+        private void LoadAddresses()
+        {
+            string OutPacketInitPattern = "B8??????00E8??????005151568BF183660400";
+            string EncodeBytePattern = "568BF16A01E8????????8B4E088B4604";
+            string EncodeShortPattern = "568BF16A02E8????????8B4E088B4604";
+            string EncodeIntPattern = "568BF16A04E8????????8B4E088B4604";
+
+            Scanner scanner = new Scanner(0xFFFFFF);
+            EncodeByteAddress = scanner.FindPattern(EncodeBytePattern, 0);
+            EncodeShortAddress = scanner.FindPattern(EncodeShortPattern, 0);
+            EncodeIntAddress = scanner.FindPattern(EncodeIntPattern, 0);
+            OutPacketInitAddress = scanner.FindPattern(OutPacketInitPattern, 0);
+        }
+
+        private void LoadOriginalFunctions()
+        {
+            OutPacketInitOriginal = (DOutPacketInit)Marshal.GetDelegateForFunctionPointer(OutPacketInitAddress, typeof(DOutPacketInit));
+            EncodeByteOriginal = (DEncodeByte)Marshal.GetDelegateForFunctionPointer(EncodeByteAddress, typeof(DEncodeByte));
+            EncodeShortOriginal = (DEncodeShort)Marshal.GetDelegateForFunctionPointer(EncodeShortAddress, typeof(DEncodeShort));
+            EncodeIntOriginal = (DEncodeInt)Marshal.GetDelegateForFunctionPointer(EncodeIntAddress, typeof(DEncodeInt));
+            EncodeBufferOriginal = (DEncodeBuffer)Marshal.GetDelegateForFunctionPointer(EncodeBufferAddress, typeof(DEncodeBuffer));
+            EncodeStringOriginal = (DEncodeString)Marshal.GetDelegateForFunctionPointer(EncodeStringAddress, typeof(DEncodeString));
+
+            DecodeByteOriginal = (DDecodeByte)Marshal.GetDelegateForFunctionPointer(DecodeByteAddress, typeof(DDecodeByte));
+            DecodeShortOriginal = (DDecodeShort)Marshal.GetDelegateForFunctionPointer(DecodeShortAddress, typeof(DDecodeShort));
+            DecodeIntOriginal = (DDecodeInt)Marshal.GetDelegateForFunctionPointer(DecodeIntAddress, typeof(DDecodeInt));
+            DecodeBufferOriginal = (DDecodeBuffer)Marshal.GetDelegateForFunctionPointer(DecodeBufferAddress, typeof(DDecodeBuffer));
+            DecodeStringOriginal = (DDecodeString)Marshal.GetDelegateForFunctionPointer(DecodeStringAddress, typeof(DDecodeString));
+
+            //SendPacketOriginal = (DSendPacket)Marshal.GetDelegateForFunctionPointer(SendPacketAddress, typeof(DSendPacket));
         }
 
         #region Delegates

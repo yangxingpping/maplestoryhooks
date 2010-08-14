@@ -142,14 +142,25 @@ namespace MapleStoryHooks
 
         public void addToTable(PacketSegment segment)
         {
-            listBox1.Items.Add(segment.Direction + " : " + segment.Type.ToString() + " : " + segment.ToString());
-            listBox1.SelectedIndex = listBox1.Items.Count - 1;
-            listBox1.SelectedIndex = -1;
+            if (segment.Direction == "RECV")
+            {
+
+                listBox1.Items.Add(segment.Direction + " : " + segment.Type.ToString() + " : " + segment.ToString());
+                listBox1.SelectedIndex = listBox1.Items.Count - 1;
+                listBox1.SelectedIndex = -1;
+            }
+            else
+            {
+                listBox2.Items.Add(segment.Direction + " : " + segment.Type.ToString() + " : " + segment.ToString());
+                listBox2.SelectedIndex = listBox2.Items.Count - 1;
+                listBox2.SelectedIndex = -1;
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             listBox1.Items.Clear();
+            listBox2.Items.Clear();
         }
     }
 
