@@ -31,8 +31,6 @@ namespace MapleStoryHooks
             Console.WriteLine("MapleStory Hooksss");
             Console.WriteLine();
 
-            //Process[] processes = Process.GetProcessesByName("localhost");
-
             bool lookingForProcess = true;
             while (lookingForProcess)
             {
@@ -43,8 +41,8 @@ namespace MapleStoryHooks
                 {
                     Console.WriteLine("Found process.");
                     int pid = processes[0].Id;
-                    string path = @"C:\Users\raz\Documents\Visual Studio 2010\Projects\MapleStoryHooks\MapleStoryHooks\bin\Debug\MapleStoryHooks.dll";
-                    string path2 = @"C:\Users\raz\Documents\Visual Studio 2010\Projects\MapleStoryHooks\MapleStoryHooks\bin\Debug\MapleStoryHooks.exe";
+                    string path = @"MapleStoryHooks.dll";
+                    string path2 = @"MapleStoryHooks.exe";
 
                     Config.Register("Maplestory hook", path, path2);
 
