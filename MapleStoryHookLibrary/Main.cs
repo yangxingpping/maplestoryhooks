@@ -63,14 +63,16 @@ namespace MapleStoryHooks
 
                 LocalHook.EnableRIPRelocation();
 
-
-
+                string OutPacketInitPattern = "B8??????00E8??????005151568BF183660400";
+                string EncodeBytePattern = "568BF16A01E8????????8B4E088B4604";
+                string EncodeShortPattern = "568BF16A02E8????????8B4E088B4604";
                 string EncodeIntPattern = "568BF16A04E8????????8B4E088B4604";
-                IntPtr mHandle = Scanner.GetModuleHandle(null);
-                Scanner scanner = new Scanner(mHandle, 0xFFFF);
-                Interface.WriteConsole(mHandle.ToInt32().ToString());
-                IntPtr address = scanner.FindPattern(EncodeIntPattern, 0);
-                Interface.WriteConsole(address.ToInt32().ToString());
+                
+                Scanner scanner = new Scanner(0xFFFFFF);
+                EncodeByteAddress = scanner.FindPattern(EncodeBytePattern, 0);
+                EncodeShortAddress = scanner.FindPattern(EncodeShortPattern, 0);
+                EncodeIntAddress = scanner.FindPattern(EncodeIntPattern, 0);
+                OutPacketInitAddress = scanner.FindPattern(OutPacketInitPattern, 0);
 
 
                 original1 = (DOutPacketInit)Marshal.GetDelegateForFunctionPointer(OutPacketInitAddress, typeof(DOutPacketInit));
