@@ -15,21 +15,24 @@ namespace MapleStoryHooks
         internal static MapleStoryHookInterface Interface;
         internal static List<LocalHook> hooks;
 
-        internal static DOutPacketInit original1;
-        internal static DEncodeByte original2;
-        internal static DEncodeShort original3;
-        internal static DEncodeInt original4;
-        internal static DEncodeBuffer original5;
-        internal static DEncodeString original6;
+        #region Original Functions
+        internal static DOutPacketInit OutPacketInitOriginal;
+        internal static DEncodeByte EncodeByteOriginal;
+        internal static DEncodeShort EncodeShortOriginal;
+        internal static DEncodeInt EncodeIntOriginal;
+        internal static DEncodeBuffer EncodeBufferOriginal;
+        internal static DEncodeString EncodeStringOriginal;
 
-        internal static DDecodeByte original7;
-        internal static DDecodeShort original8;
-        internal static DDecodeInt original9;
-        internal static DDecodeBuffer original10;
-        internal static DDecodeString original11;
+        internal static DDecodeByte DecodeByteOriginal;
+        internal static DDecodeShort DecodeShortOriginal;
+        internal static DDecodeInt DecodeIntOriginal;
+        internal static DDecodeBuffer DecodeBufferOriginal;
+        internal static DDecodeString DecodeStringOriginal;
 
-        internal static DSendPacket original12;
+        internal static DSendPacket SendPacketOriginal;
+        #endregion
 
+        #region Addresses
         internal static IntPtr OutPacketInitAddress = (IntPtr)0x004241AD;
         internal static IntPtr EncodeByteAddress = (IntPtr)0x00403FEE;
         internal static IntPtr EncodeShortAddress = (IntPtr)0x0040D928;
@@ -44,9 +47,9 @@ namespace MapleStoryHooks
         internal static IntPtr DecodeIntAddress = (IntPtr)0x00403FB6;
         internal static IntPtr DecodeBufferAddress = (IntPtr)0x0040E50A;
         internal static IntPtr DecodeStringAddress = (IntPtr)0x00409520;
+        #endregion
 
         internal Form1 form = new Form1();
-
 
         public Main(RemoteHooking.IContext InContext, String InChannelName)
         {
@@ -75,38 +78,38 @@ namespace MapleStoryHooks
                 OutPacketInitAddress = scanner.FindPattern(OutPacketInitPattern, 0);
 
 
-                original1 = (DOutPacketInit)Marshal.GetDelegateForFunctionPointer(OutPacketInitAddress, typeof(DOutPacketInit));
-                original2 = (DEncodeByte)Marshal.GetDelegateForFunctionPointer(EncodeByteAddress, typeof(DEncodeByte));
-                original3 = (DEncodeShort)Marshal.GetDelegateForFunctionPointer(EncodeShortAddress, typeof(DEncodeShort));
-                original4 = (DEncodeInt)Marshal.GetDelegateForFunctionPointer(EncodeIntAddress, typeof(DEncodeInt));
-                original5 = (DEncodeBuffer)Marshal.GetDelegateForFunctionPointer(EncodeBufferAddress, typeof(DEncodeBuffer));
-                original6 = (DEncodeString)Marshal.GetDelegateForFunctionPointer(EncodeStringAddress, typeof(DEncodeString));
+                OutPacketInitOriginal = (DOutPacketInit)Marshal.GetDelegateForFunctionPointer(OutPacketInitAddress, typeof(DOutPacketInit));
+                EncodeByteOriginal = (DEncodeByte)Marshal.GetDelegateForFunctionPointer(EncodeByteAddress, typeof(DEncodeByte));
+                EncodeShortOriginal = (DEncodeShort)Marshal.GetDelegateForFunctionPointer(EncodeShortAddress, typeof(DEncodeShort));
+                EncodeIntOriginal = (DEncodeInt)Marshal.GetDelegateForFunctionPointer(EncodeIntAddress, typeof(DEncodeInt));
+                EncodeBufferOriginal = (DEncodeBuffer)Marshal.GetDelegateForFunctionPointer(EncodeBufferAddress, typeof(DEncodeBuffer));
+                EncodeStringOriginal = (DEncodeString)Marshal.GetDelegateForFunctionPointer(EncodeStringAddress, typeof(DEncodeString));
 
-                original7 = (DDecodeByte)Marshal.GetDelegateForFunctionPointer(DecodeByteAddress, typeof(DDecodeByte));
-                original8 = (DDecodeShort)Marshal.GetDelegateForFunctionPointer(DecodeShortAddress, typeof(DDecodeShort));
-                original9 = (DDecodeInt)Marshal.GetDelegateForFunctionPointer(DecodeIntAddress, typeof(DDecodeInt));
-                original10 = (DDecodeBuffer)Marshal.GetDelegateForFunctionPointer(DecodeBufferAddress, typeof(DDecodeBuffer));
-                original11 = (DDecodeString)Marshal.GetDelegateForFunctionPointer(DecodeStringAddress, typeof(DDecodeString));
+                DecodeByteOriginal = (DDecodeByte)Marshal.GetDelegateForFunctionPointer(DecodeByteAddress, typeof(DDecodeByte));
+                DecodeShortOriginal = (DDecodeShort)Marshal.GetDelegateForFunctionPointer(DecodeShortAddress, typeof(DDecodeShort));
+                DecodeIntOriginal = (DDecodeInt)Marshal.GetDelegateForFunctionPointer(DecodeIntAddress, typeof(DDecodeInt));
+                DecodeBufferOriginal = (DDecodeBuffer)Marshal.GetDelegateForFunctionPointer(DecodeBufferAddress, typeof(DDecodeBuffer));
+                DecodeStringOriginal = (DDecodeString)Marshal.GetDelegateForFunctionPointer(DecodeStringAddress, typeof(DDecodeString));
 
-                original12 = (DSendPacket)Marshal.GetDelegateForFunctionPointer(SendPacketAddress, typeof(DSendPacket));
+                SendPacketOriginal = (DSendPacket)Marshal.GetDelegateForFunctionPointer(SendPacketAddress, typeof(DSendPacket));
 
                 hooks = new List<LocalHook>();
 
-                //hooks.Add(LocalHook.Create(OutPacketInitAddress, new DOutPacketInit(form.OutPacketInitHooked), this));
-                //hooks.Add(LocalHook.Create(EncodeByteAddress, new DEncodeByte(form.EncodeByteHooked), this));
-                //hooks.Add(LocalHook.Create(EncodeShortAddress, new DEncodeShort(form.EncodeShortHooked), this));
-                //hooks.Add(LocalHook.Create(EncodeIntAddress, new DEncodeInt(form.EncodeIntHooked), this));
-                //hooks.Add(LocalHook.Create(EncodeBufferAddress, new DEncodeBuffer(form.EncodeBufferHooked), this));
-                //hooks.Add(LocalHook.Create(EncodeStringAddress, new DEncodeString(form.EncodeStringHooked), this));
+                hooks.Add(LocalHook.Create(OutPacketInitAddress, new DOutPacketInit(form.OutPacketInitHooked), this));
+                hooks.Add(LocalHook.Create(EncodeByteAddress, new DEncodeByte(form.EncodeByteHooked), this));
+                hooks.Add(LocalHook.Create(EncodeShortAddress, new DEncodeShort(form.EncodeShortHooked), this));
+                hooks.Add(LocalHook.Create(EncodeIntAddress, new DEncodeInt(form.EncodeIntHooked), this));
+                hooks.Add(LocalHook.Create(EncodeBufferAddress, new DEncodeBuffer(form.EncodeBufferHooked), this));
+                hooks.Add(LocalHook.Create(EncodeStringAddress, new DEncodeString(form.EncodeStringHooked), this));
 
-                //hooks.Add(LocalHook.Create(DecodeByteAddress, new DDecodeByte(form.DecodeByteHooked), this));
-                //hooks.Add(LocalHook.Create(DecodeShortAddress, new DDecodeShort(form.DecodeShortHooked), this));
-                //hooks.Add(LocalHook.Create(DecodeIntAddress, new DDecodeInt(form.DecodeIntHooked), this));
-                //hooks.Add(LocalHook.Create(DecodeBufferAddress, new DDecodeBuffer(form.DecodeBufferHooked), this));
-                //hooks.Add(LocalHook.Create(DecodeStringAddress, new DDecodeString(form.DecodeStringHooked), this));
+                hooks.Add(LocalHook.Create(DecodeByteAddress, new DDecodeByte(form.DecodeByteHooked), this));
+                hooks.Add(LocalHook.Create(DecodeShortAddress, new DDecodeShort(form.DecodeShortHooked), this));
+                hooks.Add(LocalHook.Create(DecodeIntAddress, new DDecodeInt(form.DecodeIntHooked), this));
+                hooks.Add(LocalHook.Create(DecodeBufferAddress, new DDecodeBuffer(form.DecodeBufferHooked), this));
+                hooks.Add(LocalHook.Create(DecodeStringAddress, new DDecodeString(form.DecodeStringHooked), this));
 
 
-                hooks.Add(LocalHook.Create(SendPacketAddress, new DSendPacket(form.SendPacketHooked), this));
+                //hooks.Add(LocalHook.Create(SendPacketAddress, new DSendPacket(form.SendPacketHooked), this));
 
 
                 hooks.ForEach(hook => hook.ThreadACL.SetExclusiveACL(new Int32[] { 0 }));

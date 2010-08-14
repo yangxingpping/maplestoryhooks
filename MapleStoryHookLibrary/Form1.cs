@@ -23,7 +23,7 @@ namespace MapleStoryHooks
         public void OutPacketInitHooked(IntPtr @this, int nType, int bLoopback)
         {
 
-            Main.original1(@this, nType, bLoopback);
+            Main.OutPacketInitOriginal(@this, nType, bLoopback);
         }
 
         public void EncodeByteHooked(IntPtr @this, byte n)
@@ -31,7 +31,7 @@ namespace MapleStoryHooks
             PacketSegment segment = new PacketSegment(PacketSegmentType.BYTE, n, "SEND");
             addToTable(segment);
 
-            Main.original2(@this, n);
+            Main.EncodeByteOriginal(@this, n);
         }
 
         public void EncodeShortHooked(IntPtr @this, UInt16 n)
@@ -39,7 +39,7 @@ namespace MapleStoryHooks
             PacketSegment segment = new PacketSegment(PacketSegmentType.SHORT, n, "SEND");
             addToTable(segment);
 
-            Main.original3(@this, n);
+            Main.EncodeShortOriginal(@this, n);
         }
 
         public void EncodeIntHooked(IntPtr @this, UInt32 n)
@@ -47,7 +47,7 @@ namespace MapleStoryHooks
             PacketSegment segment = new PacketSegment(PacketSegmentType.INT, n, "SEND");
             addToTable(segment);
 
-            Main.original4(@this, n);
+            Main.EncodeIntOriginal(@this, n);
         }
 
         public void EncodeBufferHooked(IntPtr @this, IntPtr bufferPointer, UInt32 uSize)
@@ -58,7 +58,7 @@ namespace MapleStoryHooks
             PacketSegment segment = new PacketSegment(PacketSegmentType.BUFFER, data, "SEND");
             addToTable(segment);
 
-            Main.original5(@this, bufferPointer, uSize);
+            Main.EncodeBufferOriginal(@this, bufferPointer, uSize);
         }
 
         public void EncodeStringHooked(IntPtr @this, IntPtr stringPointer)
@@ -69,14 +69,14 @@ namespace MapleStoryHooks
             PacketSegment segment = new PacketSegment(PacketSegmentType.STRING, s, "SEND");
             addToTable(segment);
 
-            Main.original6(@this, stringPointer);
+            Main.EncodeStringOriginal(@this, stringPointer);
         }
 
 
         public int SendPacketHooked(IntPtr @this, IntPtr packetPointer)
         {
             listBox1.Items.Add("SND POINTER: " + packetPointer.ToInt32());
-            return Main.original12(@this, packetPointer);
+            return Main.SendPacketOriginal(@this, packetPointer);
         }
 
 
@@ -88,7 +88,7 @@ namespace MapleStoryHooks
             PacketSegment segment = new PacketSegment(PacketSegmentType.BYTE, result, "RECV");
             addToTable(segment);
 
-            return Main.original7(@this);
+            return Main.DecodeByteOriginal(@this);
         }
 
         public UInt16 DecodeShortHooked(IntPtr @this)
@@ -99,7 +99,7 @@ namespace MapleStoryHooks
             PacketSegment segment = new PacketSegment(PacketSegmentType.SHORT, result, "RECV");
             addToTable(segment);
 
-            return Main.original8(@this);
+            return Main.DecodeShortOriginal(@this);
         }
 
         public UInt32 DecodeIntHooked(IntPtr @this)
@@ -110,7 +110,7 @@ namespace MapleStoryHooks
             PacketSegment segment = new PacketSegment(PacketSegmentType.INT, result, "RECV");
             addToTable(segment);
 
-            return Main.original9(@this);
+            return Main.DecodeIntOriginal(@this);
         }
 
         public void DecodeBufferHooked(IntPtr @this, IntPtr bufferPointer, UInt32 uSize)
@@ -121,7 +121,7 @@ namespace MapleStoryHooks
             PacketSegment segment = new PacketSegment(PacketSegmentType.BUFFER, result, "RECV");
             addToTable(segment);
 
-            Main.original10(@this, bufferPointer, uSize);
+            Main.DecodeBufferOriginal(@this, bufferPointer, uSize);
         }
 
         public IntPtr DecodeStringHooked(IntPtr @this, IntPtr resultPointer)
@@ -136,7 +136,7 @@ namespace MapleStoryHooks
             PacketSegment segment = new PacketSegment(PacketSegmentType.STRING, result, "RECV");
             addToTable(segment);
 
-            return Main.original11(@this, resultPointer);
+            return Main.DecodeStringOriginal(@this, resultPointer);
         }
         #endregion
 
