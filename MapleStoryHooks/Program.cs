@@ -6,6 +6,7 @@ using System.Diagnostics;
 using EasyHook;
 using System.Runtime.Remoting;
 using System.Threading;
+using System.Runtime.InteropServices;
 
 namespace MapleStoryHooks
 {
@@ -21,6 +22,8 @@ namespace MapleStoryHooks
             Console.WriteLine("[DLL] {0}", s);
         }
     }
+
+
     
     public class Program
     {
@@ -34,7 +37,7 @@ namespace MapleStoryHooks
             bool lookingForProcess = true;
             while (lookingForProcess)
             {
-                Process[] processes = Process.GetProcessesByName("WvsLogin");
+                Process[] processes = Process.GetProcessesByName("localhost");
 
 
                 if (processes.Length > 0)
