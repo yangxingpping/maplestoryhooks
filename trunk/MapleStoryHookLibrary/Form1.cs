@@ -72,6 +72,14 @@ namespace MapleStoryHooks
             Main.original6(@this, stringPointer);
         }
 
+
+        public int SendPacketHooked(IntPtr @this, IntPtr packetPointer)
+        {
+            listBox1.Items.Add("SND POINTER: " + packetPointer.ToInt32());
+            return Main.original12(@this, packetPointer);
+        }
+
+
         public byte DecodeByteHooked(IntPtr @this)
         {
             MaplePacket packet = (MaplePacket)Marshal.PtrToStructure(@this, typeof(MaplePacket));
@@ -137,6 +145,11 @@ namespace MapleStoryHooks
             listBox1.Items.Add(segment.Direction + " : " + segment.Type.ToString() + " : " + segment.ToString());
             listBox1.SelectedIndex = listBox1.Items.Count - 1;
             listBox1.SelectedIndex = -1;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            listBox1.Items.Clear();
         }
     }
 
