@@ -37,7 +37,8 @@ namespace MapleStoryHooks
             bool lookingForProcess = true;
             while (lookingForProcess)
             {
-                Process[] processes = Process.GetProcessesByName("WvsLogin");
+                //Process[] processes = Process.GetProcessesByName("WvsLogin");
+                Process[] processes = Process.GetProcessesByName("localhost");
 
 
                 if (processes.Length > 0)
