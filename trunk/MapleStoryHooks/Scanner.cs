@@ -20,15 +20,19 @@ namespace MapleStoryHooks
             ref UInt32 lpNumberOfBytesRead
             );
 
-
         [DllImport("kernel32.dll")]
         public static extern IntPtr GetModuleHandle(string lpModuleName);
-
 
         private IntPtr mHandle;
         private int mSize;
 
         private byte[] mBuffer;
+
+        public Scanner()
+        {
+            this.mHandle = GetModuleHandle(null);
+            this.mSize = 0xFFFFFF;
+        }
 
         public Scanner(int pSize)
         {

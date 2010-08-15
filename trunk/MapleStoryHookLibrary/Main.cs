@@ -80,7 +80,7 @@ namespace MapleStoryHooks
 
                 LocalHook.EnableRIPRelocation(); // no idea what this does
 
-                //DebugAddresses();
+                DebugAddresses();
 
                 LoadAddresses();
 
@@ -120,7 +120,7 @@ namespace MapleStoryHooks
 
         private void LoadAddresses()
         {
-            Scanner scanner = new Scanner(0xFFFFFF);
+            Scanner scanner = new Scanner();
 
             OutPacketInitAddress = scanner.FindPattern(OutPacketInitPattern, 0);
             EncodeByteAddress = scanner.FindPattern(EncodeBytePattern, 0);
@@ -134,8 +134,7 @@ namespace MapleStoryHooks
             DecodeIntAddress = scanner.FindPattern(DecodeIntPattern, 0);
             DecodeBufferAddress = scanner.FindPattern(DecodeBufferPattern, 0);
             DecodeStringAddress = scanner.FindPattern(DecodeStringPattern, 0);
-
-            
+   
         }
 
         private void LoadOriginalFunctions()
@@ -152,27 +151,25 @@ namespace MapleStoryHooks
             DecodeShortOriginal = (DDecodeShort)Marshal.GetDelegateForFunctionPointer(DecodeShortAddress, typeof(DDecodeShort));
             DecodeIntOriginal = (DDecodeInt)Marshal.GetDelegateForFunctionPointer(DecodeIntAddress, typeof(DDecodeInt));
             DecodeBufferOriginal = (DDecodeBuffer)Marshal.GetDelegateForFunctionPointer(DecodeBufferAddress, typeof(DDecodeBuffer));
-            DecodeStringOriginal = (DDecodeString)Marshal.GetDelegateForFunctionPointer(DecodeStringAddress, typeof(DDecodeString));
-
-            
+            DecodeStringOriginal = (DDecodeString)Marshal.GetDelegateForFunctionPointer(DecodeStringAddress, typeof(DDecodeString));   
         }
 
         private void DebugAddresses()
         {
-            Scanner scanner = new Scanner(0xFFFFFF);
+            Scanner scanner = new Scanner();
 
-            Interface.WriteConsole(scanner.FindPatternAsHex(OutPacketInitPattern, 0));
-            Interface.WriteConsole(scanner.FindPatternAsHex(EncodeBytePattern, 0));
-            Interface.WriteConsole(scanner.FindPatternAsHex(EncodeShortPattern, 0));
-            Interface.WriteConsole(scanner.FindPatternAsHex(EncodeIntPattern, 0));
-            Interface.WriteConsole(scanner.FindPatternAsHex(EncodeBufferPattern, 0));
-            Interface.WriteConsole(scanner.FindPatternAsHex(EncodeStringPattern, 0));
+            Interface.WriteConsole("S PACKET " + scanner.FindPatternAsHex(OutPacketInitPattern, 0));
+            Interface.WriteConsole("S BYTE " + scanner.FindPatternAsHex(EncodeBytePattern, 0));
+            Interface.WriteConsole("S SHORT " + scanner.FindPatternAsHex(EncodeShortPattern, 0));
+            Interface.WriteConsole("S INT " + scanner.FindPatternAsHex(EncodeIntPattern, 0));
+            Interface.WriteConsole("S BUFFER " + scanner.FindPatternAsHex(EncodeBufferPattern, 0));
+            Interface.WriteConsole("S STRING " + scanner.FindPatternAsHex(EncodeStringPattern, 0));
 
-            Interface.WriteConsole(scanner.FindPatternAsHex(DecodeBytePattern, 0));
-            Interface.WriteConsole(scanner.FindPatternAsHex(DecodeShortPattern, 0));
-            Interface.WriteConsole(scanner.FindPatternAsHex(DecodeIntPattern, 0));
-            Interface.WriteConsole(scanner.FindPatternAsHex(DecodeBufferPattern, 0));
-            Interface.WriteConsole(scanner.FindPatternAsHex(DecodeStringPattern, 0));
+            Interface.WriteConsole("R BYTE " + scanner.FindPatternAsHex(DecodeBytePattern, 0));
+            Interface.WriteConsole("R SHORT " + scanner.FindPatternAsHex(DecodeShortPattern, 0));
+            Interface.WriteConsole("R INT " + scanner.FindPatternAsHex(DecodeIntPattern, 0));
+            Interface.WriteConsole("R BUFFER " + scanner.FindPatternAsHex(DecodeBufferPattern, 0));
+            Interface.WriteConsole("R STRING " + scanner.FindPatternAsHex(DecodeStringPattern, 0));
         }
 
         #region Delegates
