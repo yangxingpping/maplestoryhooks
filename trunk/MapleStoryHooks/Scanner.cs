@@ -118,5 +118,10 @@ namespace MapleStoryHooks
                 return (IntPtr)(-3);
             }
         }
+
+        public string FindPatterAsHex(string pattern, int nOffset)
+        {
+            return Convert.ToString(FindPattern(pattern, nOffset).ToInt32(), 16).ToUpper();
+        }
     }
 }
