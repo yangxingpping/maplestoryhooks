@@ -32,21 +32,35 @@ namespace MapleStoryHooks
         internal static DSendPacket SendPacketOriginal;
         #endregion
 
-        #region Addresses
-        internal static IntPtr OutPacketInitAddress = (IntPtr)0x004241AD;
-        internal static IntPtr EncodeByteAddress = (IntPtr)0x00403FEE;
-        internal static IntPtr EncodeShortAddress = (IntPtr)0x0040D928;
-        internal static IntPtr EncodeIntAddress = (IntPtr)0x00403E9E;
-        internal static IntPtr EncodeBufferAddress = (IntPtr)0x00409449;
-        internal static IntPtr EncodeStringAddress = (IntPtr)0x0040D949;
+        #region Address Patterns
+        internal static readonly string OutPacketInitPattern = "B8 ?? ?? ?? 00 E8 ?? ?? ?? 00 51 51 56 8B F1 83 66 04 00";
+        internal static readonly string EncodeBytePattern = "56 8B F1 6A 01 E8 ?? ?? ?? ?? 8B 4E 08 8B 46 04";
+        internal static readonly string EncodeShortPattern = "56 8B F1 6A 02 E8 ?? ?? ?? ?? 8B 4E 08 8B 46 04";
+        internal static readonly string EncodeIntPattern = "56 8B F1 6A 04 E8 ?? ?? ?? ?? 8B 4E 08 8B 46 04";
+        internal static readonly string EncodeBufferPattern = "56 57 8B 7C 24 10 8B F1 57 ?? ?? ?? ?? ?? 8B 46 04 03 46 08 57 FF 74 24 10 50 ?? ?? ?? ?? ?? 01 7E 08 83 C4 0C 5F 5E C2 08 00";
+        internal static readonly string EncodeStringPattern = "B8 ?? ?? ?? 00 E8 ?? ?? ?? 00 51 56 8B F1 8B 45 08 83 65 FC 00 85 C0 74 05 8B 40 FC EB 02 33 C0 83 C0 02 50 8B CE E8 ?? ?? ?? ?? 8B 46 04 03 46 08 50 51 8D 45 08 8B CC 89 65 F0 50 E8 ?? ?? ?? ?? E8 ?? ?? ?? ?? 01 46 08 83 4D FC FF 59 59 8D 4D 08 E8 ?? ?? ?? ?? 8B 4D F4 64 89 0D 00 00 00 00 5E C9 C2 04 00";
 
+        internal static readonly string DecodeBytePattern = "55 8B EC 51 8B 51 14 8B 41 08 56 0F B7 71 0C 2B F2 03 C2 83 FE 01 5E 73 15 ?? ?? ?? ?? ?? 8D 45 FC 50 C7 45 FC 26 00 00 00 ?? ?? ?? ?? ?? 8A 00 42 89 51 14 C9 C3";
+        internal static readonly string DecodeShortPattern = "55 8B EC 51 8B 51 14 8B 41 08 56 0F B7 71 0C 2B F2 03 C2 83 FE 02 5E 73 15 ?? ?? ?? ?? ?? 8D 45 FC 50 C7 45 FC 26 00 00 00 ?? ?? ?? ?? ?? 66 8B 00 83 C2 02 89 51 14 C9 C3";
+        internal static readonly string DecodeIntPattern = "55 8B EC 51 8B 51 14 8B 41 08 56 0F B7 71 0C 2B F2 03 C2 83 FE 04 5E 73 15 ?? ?? ?? ?? ?? 8D 45 FC 50 C7 45 FC 26 00 00 00 ?? ?? ?? ?? ?? 8B 00 83 C2 04 89 51 14 C9 C3";
+        internal static readonly string DecodeBufferPattern = "55 8B EC 56 8B F1 0F B7 56 0C 8B 4E 14 8B 46 08 57 8B 7D 0C 2B D1 03 C1 3B D7 73 15 ?? ?? ?? ?? ?? 8D 45 0C 50 C7 45 0C 26 00 00 00 ?? ?? ?? ?? ?? 57 50 FF 75 08 ?? ?? ?? ?? ?? 83 C4 0C 01 7E 14 5F 5E 5D C2 08 00";
+        internal static readonly string DecodeStringPattern = "B8 ?? ?? ?? 00 E8 ?? ?? ?? 00 51 51 83 65 EC 00 83 65 F0 00 56 57 8B F1 8B 46 14 0F B7 4E 0C 6A 01 2B C8 5F 51 8B 4E 08 03 C8 51 8D 45 F0 50 89 7D FC ?? ?? ?? ?? ?? 01 46 14 8B 75 08 83 26 00 83 C4 0C 8D 45 F0 50 8B CE ?? ?? ?? ?? ?? 89 7D EC 80 65 FC 00 8D 4D F0 ?? ?? ?? ?? ?? 8B 4D F4 5F 8B C6 5E 64 89 0D 00 00 00 00 C9 C2 04 00";
+        #endregion
+
+        #region Addresses
+        internal static IntPtr OutPacketInitAddress;
+        internal static IntPtr EncodeByteAddress;
+        internal static IntPtr EncodeShortAddress;
+        internal static IntPtr EncodeIntAddress;
+        internal static IntPtr EncodeBufferAddress;
+        internal static IntPtr EncodeStringAddress;
         internal static IntPtr SendPacketAddress = (IntPtr)0x0049637B; //GMS 83
 
-        internal static IntPtr DecodeByteAddress = (IntPtr)0x00403D9C;
-        internal static IntPtr DecodeShortAddress = (IntPtr)0x0040928A;
-        internal static IntPtr DecodeIntAddress = (IntPtr)0x00403FB6;
-        internal static IntPtr DecodeBufferAddress = (IntPtr)0x0040E50A;
-        internal static IntPtr DecodeStringAddress = (IntPtr)0x00409520;
+        internal static IntPtr DecodeByteAddress;
+        internal static IntPtr DecodeShortAddress;
+        internal static IntPtr DecodeIntAddress;
+        internal static IntPtr DecodeBufferAddress;
+        internal static IntPtr DecodeStringAddress;
         #endregion
 
         internal Form1 form = new Form1();
@@ -85,7 +99,7 @@ namespace MapleStoryHooks
                 hooks.Add(LocalHook.Create(DecodeBufferAddress, new DDecodeBuffer(form.DecodeBufferHooked), this));
                 hooks.Add(LocalHook.Create(DecodeStringAddress, new DDecodeString(form.DecodeStringHooked), this));
 
-                hooks.Add(LocalHook.Create(SendPacketAddress, new DSendPacket(form.SendPacketHooked), this));
+                //hooks.Add(LocalHook.Create(SendPacketAddress, new DSendPacket(form.SendPacketHooked), this));
 
 
                 hooks.ForEach(hook => hook.ThreadACL.SetExclusiveACL(new Int32[] { 0 }));
@@ -104,23 +118,9 @@ namespace MapleStoryHooks
 
         private void LoadAddresses()
         {
-            string OutPacketInitPattern = "B8??????00E8??????005151568BF183660400";
-            string EncodeBytePattern = "568BF16A01E8????????8B4E088B4604";
-            string EncodeShortPattern = "568BF16A02E8????????8B4E088B4604";
-            string EncodeIntPattern = "568BF16A04E8????????8B4E088B4604";
-            string EncodeBufferPattern = "56 57 8B 7C 24 10 8B F1 57 ?? ?? ?? ?? ?? 8B 46 04 03 46 08 57 FF 74 24 10 50 ?? ?? ?? ?? ?? 01 7E 08 83 C4 0C 5F 5E C2 08 00";
-            string EncodeStringPattern = "B8 ?? ?? ?? 00 E8 ?? ?? 5F 00 51 56 8B F1 8B 45 08 83 65 FC 00 85 C0 74 05 8B 40 FC EB 02 33 C0 83 C0 02 50 8B CE E8 ?? ?? F9 FF 8B 46 04 03 46 08 50 51 8D 45 08 8B CC 89 65 F0 50 E8 ?? ?? FB FF E8 20 00 00 00 01 46 08 83 4D FC FF 59 59 8D 4D 08 E8 ?? ?? F9 FF 8B 4D F4 64 89 0D 00 00 00 00 5E C9 C2 04 00";
-            
-            string DecodeBytePattern = "55 8B EC 51 8B 51 14 8B 41 08 56 0F B7 71 0C 2B F2 03 C2 83 FE 01 5E 73 15 ?? ?? ?? ?? ?? 8D 45 FC 50 C7 45 FC 26 00 00 00 ?? ?? ?? ?? ?? 8A 00 42 89 51 14 C9 C3";
-            string DecodeShortPattern = "55 8B EC 51 8B 51 14 8B 41 08 56 0F B7 71 0C 2B F2 03 C2 83 FE 02 5E 73 15 ?? ?? ?? ?? ?? 8D 45 FC 50 C7 45 FC 26 00 00 00 ?? ?? ?? ?? ?? 66 8B 00 83 C2 02 89 51 14 C9 C3";
-            string DecodeIntPattern = "55 8B EC 51 8B 51 14 8B 41 08 56 0F B7 71 0C 2B F2 03 C2 83 FE 04 5E 73 15 ?? ?? ?? ?? ?? 8D 45 FC 50 C7 45 FC 26 00 00 00 ?? ?? ?? ?? ?? 8B 00 83 C2 04 89 51 14 C9 C3";
-            string DecodeBufferPattern = "55 8B EC 56 8B F1 0F B7 56 0C 8B 4E 14 8B 46 08 57 8B 7D 0C 2B D1 03 C1 3B D7 73 15 ?? ?? ?? ?? ?? 8D 45 0C 50 C7 45 0C 26 00 00 00 ?? ?? ?? ?? ?? 57 50 FF 75 08 ?? ?? ?? ?? ?? 83 C4 0C 01 7E 14 5F 5E 5D C2 08 00";
-            string DecodeStringPattern = "B8 EB E4 A7 00 ?? ?? ?? ?? ?? 51 51 83 65 EC 00 83 65 F0 00 56 57 8B F1 8B 46 14 0F B7 4E 0C 6A 01 2B C8 5F 51 8B 4E 08 03 C8 51 8D 45 F0 50 89 7D FC ?? ?? ?? ?? ?? 01 46 14 8B 75 08 83 26 00 83 C4 0C 8D 45 F0 50 8B CE ?? ?? ?? ?? ?? 89 7D EC 80 65 FC 00 8D 4D F0 ?? ?? ?? ?? ?? 8B 4D F4 5F 8B C6 5E 64 89 0D 00 00 00 00 C9 C2 04 00";
-
             Scanner scanner = new Scanner(0xFFFFFF);
 
             OutPacketInitAddress = scanner.FindPattern(OutPacketInitPattern, 0);
-
             EncodeByteAddress = scanner.FindPattern(EncodeBytePattern, 0);
             EncodeShortAddress = scanner.FindPattern(EncodeShortPattern, 0);
             EncodeIntAddress = scanner.FindPattern(EncodeIntPattern, 0);
@@ -132,6 +132,8 @@ namespace MapleStoryHooks
             DecodeIntAddress = scanner.FindPattern(DecodeIntPattern, 0);
             DecodeBufferAddress = scanner.FindPattern(DecodeBufferPattern, 0);
             DecodeStringAddress = scanner.FindPattern(DecodeStringPattern, 0);
+
+            
         }
 
         private void LoadOriginalFunctions()
@@ -142,6 +144,7 @@ namespace MapleStoryHooks
             EncodeIntOriginal = (DEncodeInt)Marshal.GetDelegateForFunctionPointer(EncodeIntAddress, typeof(DEncodeInt));
             EncodeBufferOriginal = (DEncodeBuffer)Marshal.GetDelegateForFunctionPointer(EncodeBufferAddress, typeof(DEncodeBuffer));
             EncodeStringOriginal = (DEncodeString)Marshal.GetDelegateForFunctionPointer(EncodeStringAddress, typeof(DEncodeString));
+            SendPacketOriginal = (DSendPacket)Marshal.GetDelegateForFunctionPointer(SendPacketAddress, typeof(DSendPacket));
 
             DecodeByteOriginal = (DDecodeByte)Marshal.GetDelegateForFunctionPointer(DecodeByteAddress, typeof(DDecodeByte));
             DecodeShortOriginal = (DDecodeShort)Marshal.GetDelegateForFunctionPointer(DecodeShortAddress, typeof(DDecodeShort));
@@ -149,7 +152,25 @@ namespace MapleStoryHooks
             DecodeBufferOriginal = (DDecodeBuffer)Marshal.GetDelegateForFunctionPointer(DecodeBufferAddress, typeof(DDecodeBuffer));
             DecodeStringOriginal = (DDecodeString)Marshal.GetDelegateForFunctionPointer(DecodeStringAddress, typeof(DDecodeString));
 
-            SendPacketOriginal = (DSendPacket)Marshal.GetDelegateForFunctionPointer(SendPacketAddress, typeof(DSendPacket));
+            
+        }
+
+        private void DebugAddresses()
+        {
+            Scanner scanner = new Scanner(0xFFFFFF);
+
+            Interface.WriteConsole(scanner.FindPatternAsHex(OutPacketInitPattern, 0));
+            Interface.WriteConsole(scanner.FindPatternAsHex(EncodeBytePattern, 0));
+            Interface.WriteConsole(scanner.FindPatternAsHex(EncodeShortPattern, 0));
+            Interface.WriteConsole(scanner.FindPatternAsHex(EncodeIntPattern, 0));
+            Interface.WriteConsole(scanner.FindPatternAsHex(EncodeBufferPattern, 0));
+            Interface.WriteConsole(scanner.FindPatternAsHex(EncodeStringPattern, 0));
+
+            Interface.WriteConsole(scanner.FindPatternAsHex(DecodeBytePattern, 0));
+            Interface.WriteConsole(scanner.FindPatternAsHex(DecodeShortPattern, 0));
+            Interface.WriteConsole(scanner.FindPatternAsHex(DecodeIntPattern, 0));
+            Interface.WriteConsole(scanner.FindPatternAsHex(DecodeBufferPattern, 0));
+            Interface.WriteConsole(scanner.FindPatternAsHex(DecodeStringPattern, 0));
         }
 
         #region Delegates

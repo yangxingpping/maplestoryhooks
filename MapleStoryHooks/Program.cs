@@ -33,12 +33,15 @@ namespace MapleStoryHooks
         {
             Console.WriteLine("MapleStory Hooksss");
             Console.WriteLine();
+            Console.WriteLine("Input process name...");
+            
+            string processName = Console.ReadLine();
 
             bool lookingForProcess = true;
             while (lookingForProcess)
             {
                 //Process[] processes = Process.GetProcessesByName("WvsLogin");
-                Process[] processes = Process.GetProcessesByName("localhost");
+                Process[] processes = Process.GetProcessesByName(processName);
 
 
                 if (processes.Length > 0)
