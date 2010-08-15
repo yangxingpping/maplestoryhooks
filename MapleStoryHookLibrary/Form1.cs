@@ -20,10 +20,10 @@ namespace MapleStoryHooks
         }
 
         #region Hooked Methods
-        public void OutPacketInitHooked(IntPtr @this, int nType, int bLoopback)
+        public int OutPacketInitHooked(IntPtr @this, int nType, int bLoopback)
         {
 
-            Main.OutPacketInitOriginal(@this, nType, bLoopback);
+            return Main.OutPacketInitOriginal(@this, nType, bLoopback);
         }
 
         public void EncodeByteHooked(IntPtr @this, byte n)
