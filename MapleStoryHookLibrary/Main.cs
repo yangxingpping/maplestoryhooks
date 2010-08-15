@@ -80,6 +80,8 @@ namespace MapleStoryHooks
 
                 LocalHook.EnableRIPRelocation(); // no idea what this does
 
+                //DebugAddresses();
+
                 LoadAddresses();
 
                 LoadOriginalFunctions();

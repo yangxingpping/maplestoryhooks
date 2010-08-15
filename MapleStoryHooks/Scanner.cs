@@ -123,5 +123,34 @@ namespace MapleStoryHooks
         {
             return Convert.ToString(FindPattern(pattern, nOffset).ToInt32(), 16).ToUpper();
         }
+
+        public static string CreatePatternFromHex(string hexInput)
+        {
+            hexInput = hexInput.Replace("-", "");
+            hexInput = hexInput.Replace(" ", "");
+
+            if (hexInput.Length % 2 != 0)
+            {
+                return null;
+            }
+
+            string pattern = "";
+
+            for (int i = 0; i < hexInput.Length / 2; i++)
+            {
+                string valueStr = hexInput.Substring(i * 2, 2);
+                int value = Convert.ToInt16(valueStr, 16);
+
+                pattern += Convert.ToString(value, 16).PadLeft(2, '0').ToUpper() + " ";
+                if (value == 0xE8 || value == 0xB8)
+                {
+                    pattern += "?? ?? ?? ?? ";
+                    i += 4;
+                }
+            }
+            pattern = pattern.TrimEnd(' ');
+
+            return pattern;
+        }
     }
 }
