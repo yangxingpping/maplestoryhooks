@@ -33,7 +33,6 @@ namespace MapleStoryHooks
 
             foreach (PacketSegment segment in Segments)
             {
-                Main.Interface.WriteConsole(segment.Value.GetType().Name);
                 switch (segment.Type)
                 {
                     case PacketSegmentType.BYTE:

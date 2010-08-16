@@ -94,6 +94,7 @@
             // columnHeader3
             // 
             this.columnHeader3.Text = "Data";
+            this.columnHeader3.Width = 444;
             // 
             // formattedLogTabPage
             // 
@@ -131,6 +132,7 @@
             // columnHeader6
             // 
             this.columnHeader6.Text = "Data";
+            this.columnHeader6.Width = 444;
             // 
             // settingsTabPage
             // 
