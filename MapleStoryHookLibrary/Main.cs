@@ -81,7 +81,7 @@ namespace MapleStoryHooks
 
                 LocalHook.EnableRIPRelocation(); // no idea what this does
 
-                DebugAddresses();
+                //DebugAddresses();
 
                 LoadAddresses();
 
@@ -189,10 +189,10 @@ namespace MapleStoryHooks
         public delegate void DEncodeByte(IntPtr @this, byte n);
 
         [UnmanagedFunctionPointer(CallingConvention.ThisCall, SetLastError = true)]
-        public delegate void DEncodeShort(IntPtr @this, UInt16 n);
+        public delegate void DEncodeShort(IntPtr @this, Int16 n);
 
         [UnmanagedFunctionPointer(CallingConvention.ThisCall, SetLastError = true)]
-        public delegate void DEncodeInt(IntPtr @this, UInt32 n);
+        public delegate void DEncodeInt(IntPtr @this, Int32 n);
 
         [UnmanagedFunctionPointer(CallingConvention.ThisCall, SetLastError = true)]
         public delegate void DEncodeBuffer(IntPtr @this, IntPtr bufferPointer, UInt32 uSize);
@@ -218,7 +218,6 @@ namespace MapleStoryHooks
         [UnmanagedFunctionPointer(CallingConvention.ThisCall, SetLastError = true)]
         public delegate IntPtr DDecodeString(IntPtr @this, IntPtr resultPointer);
         #endregion
-
 
     }
 
