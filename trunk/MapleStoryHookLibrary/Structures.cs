@@ -77,6 +77,24 @@ namespace MapleStoryHooks
             this.Direction = pDirection;
         }
 
+        public string ToHexString()
+        {
+            switch (Type)
+            {
+                case PacketSegmentType.BYTE:
+                    return Convert.ToString((byte)Value, 16).ToUpper().PadLeft(2, '0');
+                case PacketSegmentType.SHORT:
+                    return Convert.ToString((short)Value, 16).ToUpper().PadLeft(4, '0');
+                case PacketSegmentType.INT:
+                    return Convert.ToString((int)Value, 16).ToUpper().PadLeft(8, '0');
+                case PacketSegmentType.BUFFER:
+                    return BitConverter.ToString((byte[])Value);
+                case PacketSegmentType.STRING:
+                    return "\"" + Value + "\"";
+            }
+            return "Error: Invalid segment type";
+        }
+
         /// <summary>
         /// Converts the value into a readable string
         /// </summary>
