@@ -28,19 +28,21 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.plainLogTabPage = new System.Windows.Forms.TabPage();
-            this.formattedLogTabPage = new System.Windows.Forms.TabPage();
-            this.settingsTabPage = new System.Windows.Forms.TabPage();
-            this.label1 = new System.Windows.Forms.Label();
             this.listView1 = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.formattedLogTabPage = new System.Windows.Forms.TabPage();
             this.listView2 = new System.Windows.Forms.ListView();
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.settingsTabPage = new System.Windows.Forms.TabPage();
+            this.label1 = new System.Windows.Forms.Label();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tabControl1.SuspendLayout();
             this.plainLogTabPage.SuspendLayout();
             this.formattedLogTabPage.SuspendLayout();
@@ -69,37 +71,6 @@
             this.plainLogTabPage.Text = "Plain Log";
             this.plainLogTabPage.UseVisualStyleBackColor = true;
             // 
-            // formattedLogTabPage
-            // 
-            this.formattedLogTabPage.Controls.Add(this.listView2);
-            this.formattedLogTabPage.Location = new System.Drawing.Point(4, 22);
-            this.formattedLogTabPage.Name = "formattedLogTabPage";
-            this.formattedLogTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.formattedLogTabPage.Size = new System.Drawing.Size(574, 365);
-            this.formattedLogTabPage.TabIndex = 1;
-            this.formattedLogTabPage.Text = "Formatted Log";
-            this.formattedLogTabPage.UseVisualStyleBackColor = true;
-            // 
-            // settingsTabPage
-            // 
-            this.settingsTabPage.Controls.Add(this.label1);
-            this.settingsTabPage.Location = new System.Drawing.Point(4, 22);
-            this.settingsTabPage.Name = "settingsTabPage";
-            this.settingsTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.settingsTabPage.Size = new System.Drawing.Size(574, 365);
-            this.settingsTabPage.TabIndex = 2;
-            this.settingsTabPage.Text = "Settings";
-            this.settingsTabPage.UseVisualStyleBackColor = true;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(20, 26);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(136, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Sorry, there are no settings.";
-            // 
             // listView1
             // 
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -126,6 +97,17 @@
             // 
             this.columnHeader3.Text = "Data";
             // 
+            // formattedLogTabPage
+            // 
+            this.formattedLogTabPage.Controls.Add(this.listView2);
+            this.formattedLogTabPage.Location = new System.Drawing.Point(4, 22);
+            this.formattedLogTabPage.Name = "formattedLogTabPage";
+            this.formattedLogTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.formattedLogTabPage.Size = new System.Drawing.Size(574, 365);
+            this.formattedLogTabPage.TabIndex = 1;
+            this.formattedLogTabPage.Text = "Formatted Log";
+            this.formattedLogTabPage.UseVisualStyleBackColor = true;
+            // 
             // listView2
             // 
             this.listView2.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -151,6 +133,31 @@
             // columnHeader6
             // 
             this.columnHeader6.Text = "Data";
+            // 
+            // settingsTabPage
+            // 
+            this.settingsTabPage.Controls.Add(this.label1);
+            this.settingsTabPage.Location = new System.Drawing.Point(4, 22);
+            this.settingsTabPage.Name = "settingsTabPage";
+            this.settingsTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.settingsTabPage.Size = new System.Drawing.Size(574, 365);
+            this.settingsTabPage.TabIndex = 2;
+            this.settingsTabPage.Text = "Settings";
+            this.settingsTabPage.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(20, 26);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(136, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Sorry, there are no settings.";
+            // 
+            // timer1
+            // 
+            this.timer1.Interval = 500;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // Form2
             // 
@@ -184,5 +191,6 @@
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.ColumnHeader columnHeader6;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Timer timer1;
     }
 }
