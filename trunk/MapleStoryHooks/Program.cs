@@ -34,7 +34,7 @@ namespace MapleStoryHooks
             Console.WriteLine("MapleStory Hooksss");
             Console.WriteLine();
             Console.WriteLine("Input process name...");
-
+            
             string processName = Console.ReadLine();
 
             bool lookingForProcess = true;

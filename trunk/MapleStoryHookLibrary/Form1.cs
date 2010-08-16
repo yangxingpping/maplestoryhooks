@@ -75,6 +75,12 @@ namespace MapleStoryHooks
 
         public int SendPacketHooked(IntPtr @this, IntPtr packetPointer)
         {
+            COutPacket packet = (COutPacket)Marshal.PtrToStructure(@this, typeof(COutPacket));
+            byte[] data = packet.ToArray();
+
+            PacketSegment segment = new PacketSegment(@this.ToInt32(), PacketSegmentType.BUFFER, data, "SEND WHOLE");
+            addToTable(segment);
+   
             return Main.SendPacketOriginal(@this, packetPointer);
         }
 
