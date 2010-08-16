@@ -64,7 +64,7 @@ namespace MapleStoryHooks
         internal static IntPtr DecodeStringAddress;
         #endregion
 
-        internal Form1 form = new Form1();
+        internal Form2 form = new Form2();
 
         public Main(RemoteHooking.IContext InContext, String InChannelName)
         {
@@ -98,7 +98,7 @@ namespace MapleStoryHooks
 
                 if (SendPacketAddress.ToInt32() > 0)
                 {
-                    hooks.Add(LocalHook.Create(SendPacketAddress, new DSendPacket(form.SendPacketHooked), this));
+                    //hooks.Add(LocalHook.Create(SendPacketAddress, new DSendPacket(form.SendPacketHooked), this));
                 }
 
                 hooks.Add(LocalHook.Create(DecodeByteAddress, new DDecodeByte(form.DecodeByteHooked), this));
@@ -151,7 +151,7 @@ namespace MapleStoryHooks
 
             if (SendPacketAddress.ToInt32() > 0)
             {
-                SendPacketOriginal = (DSendPacket)Marshal.GetDelegateForFunctionPointer(SendPacketAddress, typeof(DSendPacket));
+                //SendPacketOriginal = (DSendPacket)Marshal.GetDelegateForFunctionPointer(SendPacketAddress, typeof(DSendPacket));
             }
             
 
@@ -252,6 +252,7 @@ namespace MapleStoryHooks
  
     }
 
+    [StructLayout(LayoutKind.Sequential)]
     public class COutPacket
     {
         public bool Loopback;
