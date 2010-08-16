@@ -28,12 +28,12 @@ namespace MapleStoryHooks
 
             foreach (PacketSegment segment in packet.Segments)
             {
-                data += segment.ToString() + " ";
+                data += segment.ToHexString() + " ";
             }
 
             data.TrimEnd(' ');
 
-            string opcode = Convert.ToString(packet.Segments[0].Value).ToUpper().PadLeft(4, '0');
+            string opcode = packet.Segments[0].ToHexString().PadLeft(4, '0');
 
             try
             {
