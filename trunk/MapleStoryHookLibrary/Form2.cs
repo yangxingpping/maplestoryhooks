@@ -16,36 +16,49 @@ namespace MapleStoryHooks
         public Form2()
         {
             InitializeComponent();
+            timer1.Start();
         }
 
         public MaplePacket CurrentPacket { get; set; }
-        
+        public DateTime CurrentTime { get; set; }
+
         public delegate void DPacketFinished(MaplePacket packet);
 
         public void OnPacketFinished(MaplePacket packet)
         {
             string data = "";
 
-            for(int i = 1; i < packet.Segments.Count - 1; i++)
-            {
-                data += packet.Segments[i].ToHexString() + " ";
-            }
 
-            data.TrimEnd(' ');
+            if (packet.Segments.Count == 1)
+            {
+                data = "<no data>";
+            }
+            else
+            {
+                for (int i = 1; i < packet.Segments.Count; i++)
+                {
+                    data += packet.Segments[i].ToHexString() + " ";
+                }
+                data.TrimEnd(' ');
+            }
+            
 
             PacketSegment opcodeSegment = packet.Segments[0];
             string opcode = opcodeSegment.ToHexString().PadLeft(4, '0');
 
-            if (opcodeSegment.ToShort() > -1)
+            if (opcodeSegment.Type == PacketSegmentType.SHORT || opcodeSegment.Type == PacketSegmentType.BYTE)
             {
-                try
+                if (opcodeSegment.ToShort() > -1 && opcodeSegment.ToShort() < 0x200)
                 {
-                    listView1.Items.Add(new ListViewItem(new string[] { packet.Direction, packet.ToArray().Length.ToString(), BitConverter.ToString(packet.ToArray()) }));
-                    listView2.Items.Add(new ListViewItem(new string[] { packet.Direction, opcode, data }));
-                }
-                catch (Exception e)
-                {
-                    Main.Interface.WriteConsole("Packet_Finished Error: " + e.StackTrace + "\r\n" + e.Message);
+                    try
+                    {
+                        listView1.Items.Add(new ListViewItem(new string[] { packet.Direction, packet.ToArray().Length.ToString(), BitConverter.ToString(packet.ToArray()) }));
+                        listView2.Items.Add(new ListViewItem(new string[] { packet.Direction, opcode, data }));
+                    }
+                    catch (Exception e)
+                    {
+                        Main.Interface.WriteConsole("Packet_Finished Error: " + e.StackTrace + "\r\n" + e.Message);
+                    }
                 }
             }
         }
@@ -54,6 +67,8 @@ namespace MapleStoryHooks
         {
             try
             {
+                CurrentTime = DateTime.Now;
+
                 if (CurrentPacket == null)
                 {
                     CurrentPacket = new MaplePacket(id, segment.Direction);
@@ -74,6 +89,8 @@ namespace MapleStoryHooks
                         CurrentPacket.Segments.Add(segment);
                     }
                 }
+
+                CurrentTime = DateTime.Now;
             }
             catch (Exception e)
             {
@@ -211,5 +228,17 @@ namespace MapleStoryHooks
             return Main.DecodeStringOriginal(@this, resultPointer);
         }
         #endregion
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (CurrentPacket != null && CurrentTime != null && CurrentTime.Ticks > 0 && DateTime.Now.Ticks - CurrentTime.Ticks > 500)
+            {
+                MaplePacket oldPacket = CurrentPacket;
+                this.Invoke(new DPacketFinished(OnPacketFinished), oldPacket);
+                Main.Interface.WriteConsole("Add Packet From Timer");
+                CurrentPacket = null;
+                CurrentTime = DateTime.Now;
+            }
+        }
     } 
 }
