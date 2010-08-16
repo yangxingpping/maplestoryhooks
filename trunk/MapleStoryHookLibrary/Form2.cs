@@ -19,13 +19,10 @@ namespace MapleStoryHooks
         }
 
         public MaplePacket CurrentPacket { get; set; }
-
-        public DateTime Time { get; set; }
-
         
-        public delegate void PacketFinished(MaplePacket packet);
+        public delegate void DPacketFinished(MaplePacket packet);
 
-        public void OnSendPacketFinished(MaplePacket packet)
+        public void OnPacketFinished(MaplePacket packet)
         {
             string data = "";
 
@@ -36,28 +33,19 @@ namespace MapleStoryHooks
 
             data.TrimEnd(' ');
 
-            int opcode = (int)packet.Segments[0].Value;
+            string opcode = Convert.ToString(packet.Segments[0].Value).ToUpper().PadLeft(4, '0');
 
-            listView1.Items.Add(new ListViewItem(new string[] { packet.Direction, packet.ToArray().Length.ToString(), BitConverter.ToString(packet.ToArray()) }));
-            listView2.Items.Add(new ListViewItem(new string[] { packet.Direction, opcode.ToString(), data }));
-        }
-
-        public void OnRecvPacketFinished(MaplePacket packet)
-        {
-            string data = "";
-
-            foreach (PacketSegment segment in packet.Segments)
+            try
             {
-                data += segment.ToString() + " ";
+                listView1.Items.Add(new ListViewItem(new string[] { packet.Direction, packet.ToArray().Length.ToString(), BitConverter.ToString(packet.ToArray()) }));
+                listView2.Items.Add(new ListViewItem(new string[] { packet.Direction, opcode, data }));
             }
-
-            data.TrimEnd(' ');
-
-            int opcode = (int)packet.Segments[0].Value;
-
-            listView1.Items.Add(new ListViewItem(new string[] { packet.Direction, packet.ToArray().Length.ToString(), BitConverter.ToString(packet.ToArray()) }));
-            listView2.Items.Add(new ListViewItem(new string[] { packet.Direction, opcode.ToString(), data }));
+            catch (Exception e)
+            {
+                Main.Interface.WriteConsole("Packet_Finished Error: " + e.StackTrace + "\r\n" + e.Message);
+            }
         }
+
 
         public void AddSegment(int id, PacketSegment segment)
         {
@@ -78,24 +66,15 @@ namespace MapleStoryHooks
                     {
                         MaplePacket oldPacket = CurrentPacket;
 
-                        if (segment.Direction == "SEND")
-                        {
-                            this.Invoke(new PacketFinished(OnSendPacketFinished), oldPacket);
-                        }
-                        else
-                        {
-                            this.Invoke(new PacketFinished(OnRecvPacketFinished), oldPacket);
-                        }
-
+                        this.Invoke(new DPacketFinished(OnPacketFinished), oldPacket);
                         CurrentPacket = new MaplePacket(id, segment.Direction);
                         CurrentPacket.Segments.Add(segment);
                     }
                 }
-                Time = DateTime.Now;
             }
             catch (Exception e)
             {
-                Main.Interface.WriteConsole("ADDSEGMENT: " + e.StackTrace + "\r\n" + e.Message);
+                Main.Interface.WriteConsole("Add_Segment Error: " + e.StackTrace + "\r\n" + e.Message);
             }
         }
 
@@ -103,11 +82,8 @@ namespace MapleStoryHooks
         #region Hooked Methods
         public int OutPacketInitHooked(IntPtr @this, int nType, int bLoopback)
         {
-
             return Main.OutPacketInitOriginal(@this, nType, bLoopback);
         }
-
-     
 
         public void EncodeByteHooked(IntPtr @this, byte n)
         {
@@ -118,7 +94,7 @@ namespace MapleStoryHooks
             Main.EncodeByteOriginal(@this, n);
         }
 
-        public void EncodeShortHooked(IntPtr @this, UInt16 n)
+        public void EncodeShortHooked(IntPtr @this, Int16 n)
         {
             PacketSegment segment = new PacketSegment(@this.ToInt32(), PacketSegmentType.SHORT, n, "SEND");
 
@@ -127,7 +103,7 @@ namespace MapleStoryHooks
             Main.EncodeShortOriginal(@this, n);
         }
 
-        public void EncodeIntHooked(IntPtr @this, UInt32 n)
+        public void EncodeIntHooked(IntPtr @this, Int32 n)
         {
             PacketSegment segment = new PacketSegment(@this.ToInt32(), PacketSegmentType.INT, n, "SEND");
 
@@ -233,22 +209,5 @@ namespace MapleStoryHooks
             return Main.DecodeStringOriginal(@this, resultPointer);
         }
         #endregion
-
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            if (CurrentPacket != null && Time != null && Time.Ticks > 0 && DateTime.Now.Ticks - Time.Ticks > 500)
-            {
-                MaplePacket oldPacket = CurrentPacket;
-                if (oldPacket.Direction == "SEND")
-                {
-                    this.Invoke(new PacketFinished(OnSendPacketFinished), oldPacket);
-                }
-                else
-                {
-                    this.Invoke(new PacketFinished(OnRecvPacketFinished), oldPacket);
-                }
-                CurrentPacket = null;
-            }
-        }
     } 
 }
