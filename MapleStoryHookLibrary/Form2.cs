@@ -46,7 +46,6 @@ namespace MapleStoryHooks
             }
         }
 
-
         public void AddSegment(int id, PacketSegment segment)
         {
             try
@@ -77,7 +76,6 @@ namespace MapleStoryHooks
                 Main.Interface.WriteConsole("Add_Segment Error: " + e.StackTrace + "\r\n" + e.Message);
             }
         }
-
 
         #region Hooked Methods
         public int OutPacketInitHooked(IntPtr @this, int nType, int bLoopback)
