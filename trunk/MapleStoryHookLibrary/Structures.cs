@@ -103,10 +103,55 @@ namespace MapleStoryHooks
         {
             if (Type == PacketSegmentType.BUFFER)
             {
-                return BitConverter.ToString((byte[])Value);
+                return BitConverter.ToString(ToBuffer());
             }
 
             return Value.ToString();
+        }
+
+        public byte ToByte()
+        {
+            if (Type == PacketSegmentType.BYTE)
+            {
+                return (byte)Value;
+            }
+            return 0;
+        }
+
+        public short ToShort()
+        {
+            if (Type == PacketSegmentType.SHORT)
+            {
+                return (short)Value;
+            }
+            return 0;
+        }
+
+        public int ToInt()
+        {
+            if (Type == PacketSegmentType.INT)
+            {
+                return (int)Value;
+            }
+            return 0;
+        }
+
+        public byte[] ToBuffer()
+        {
+            if (Type == PacketSegmentType.BUFFER)
+            {
+                return (byte[])Value;
+            }
+            return null;
+        }
+
+        public string ToStringValue()
+        {
+            if (Type == PacketSegmentType.STRING)
+            {
+                return (string)Value;
+            }
+            return null;
         }
 
     }

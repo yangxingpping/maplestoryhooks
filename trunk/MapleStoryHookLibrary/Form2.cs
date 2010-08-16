@@ -26,23 +26,27 @@ namespace MapleStoryHooks
         {
             string data = "";
 
-            foreach (PacketSegment segment in packet.Segments)
+            for(int i = 1; i < packet.Segments.Count - 1; i++)
             {
-                data += segment.ToHexString() + " ";
+                data += packet.Segments[i].ToHexString() + " ";
             }
 
             data.TrimEnd(' ');
 
-            string opcode = packet.Segments[0].ToHexString().PadLeft(4, '0');
+            PacketSegment opcodeSegment = packet.Segments[0];
+            string opcode = opcodeSegment.ToHexString().PadLeft(4, '0');
 
-            try
+            if (opcodeSegment.ToShort() > -1)
             {
-                listView1.Items.Add(new ListViewItem(new string[] { packet.Direction, packet.ToArray().Length.ToString(), BitConverter.ToString(packet.ToArray()) }));
-                listView2.Items.Add(new ListViewItem(new string[] { packet.Direction, opcode, data }));
-            }
-            catch (Exception e)
-            {
-                Main.Interface.WriteConsole("Packet_Finished Error: " + e.StackTrace + "\r\n" + e.Message);
+                try
+                {
+                    listView1.Items.Add(new ListViewItem(new string[] { packet.Direction, packet.ToArray().Length.ToString(), BitConverter.ToString(packet.ToArray()) }));
+                    listView2.Items.Add(new ListViewItem(new string[] { packet.Direction, opcode, data }));
+                }
+                catch (Exception e)
+                {
+                    Main.Interface.WriteConsole("Packet_Finished Error: " + e.StackTrace + "\r\n" + e.Message);
+                }
             }
         }
 
