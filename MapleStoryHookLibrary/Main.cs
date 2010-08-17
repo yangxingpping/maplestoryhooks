@@ -22,14 +22,15 @@ namespace MapleStoryHooks
         internal static DEncodeInt EncodeIntOriginal;
         internal static DEncodeBuffer EncodeBufferOriginal;
         internal static DEncodeString EncodeStringOriginal;
+        internal static DSendPacket SendPacketOriginal;
 
         internal static DDecodeByte DecodeByteOriginal;
         internal static DDecodeShort DecodeShortOriginal;
         internal static DDecodeInt DecodeIntOriginal;
         internal static DDecodeBuffer DecodeBufferOriginal;
         internal static DDecodeString DecodeStringOriginal;
-
-        internal static DSendPacket SendPacketOriginal;
+        //internal static DRecvPacket DecrypDataOriginal;
+        
         #endregion
 
         #region Address Patterns
@@ -46,6 +47,7 @@ namespace MapleStoryHooks
         internal static readonly string DecodeIntPattern = "55 8B EC 51 8B 51 14 8B 41 08 56 0F B7 71 0C 2B F2 03 C2 83 FE 04 5E 73 15 ?? ?? ?? ?? ?? 8D 45 FC 50 C7 45 FC 26 00 00 00 ?? ?? ?? ?? ?? 8B 00 83 C2 04 89 51 14 C9 C3";
         internal static readonly string DecodeBufferPattern = "55 8B EC 56 8B F1 0F B7 56 0C 8B 4E 14 8B 46 08 57 8B 7D 0C 2B D1 03 C1 3B D7 73 15 ?? ?? ?? ?? ?? 8D 45 0C 50 C7 45 0C 26 00 00 00 ?? ?? ?? ?? ?? 57 50 FF 75 08 ?? ?? ?? ?? ?? 83 C4 0C 01 7E 14 5F 5E 5D C2 08 00";
         internal static readonly string DecodeStringPattern = "B8 ?? ?? ?? 00 E8 ?? ?? ?? 00 51 51 83 65 EC 00 83 65 F0 00 56 57 8B F1 8B 46 14 0F B7 4E 0C 6A 01 2B C8 5F 51 8B 4E 08 03 C8 51 8D 45 F0 50 89 7D FC ?? ?? ?? ?? ?? 01 46 14 8B 75 08 83 26 00 83 C4 0C 8D 45 F0 50 8B CE ?? ?? ?? ?? ?? 89 7D EC 80 65 FC 00 8D 4D F0 ?? ?? ?? ?? ?? 8B 4D F4 5F 8B C6 5E 64 89 0D 00 00 00 00 C9 C2 04 00";
+        //internal static readonly string DecryptDataPattern = "5F 5E 5B C9 C2 04 00 B8 ?? ?? ?? 00 E8 ?? ?? ?? ?? 83 EC ?? 53 56 57 33";
         #endregion
 
         #region Addresses
@@ -62,6 +64,7 @@ namespace MapleStoryHooks
         internal static IntPtr DecodeIntAddress;
         internal static IntPtr DecodeBufferAddress;
         internal static IntPtr DecodeStringAddress;
+        //internal static IntPtr DecryptDataAddress;
         #endregion
 
         internal Form2 form = new Form2();
@@ -81,7 +84,7 @@ namespace MapleStoryHooks
 
                 LocalHook.EnableRIPRelocation(); // no idea what this does
 
-                //DebugAddresses();
+                DebugAddresses();
 
                 LoadAddresses();
 
@@ -98,7 +101,7 @@ namespace MapleStoryHooks
 
                 if (SendPacketAddress.ToInt32() > 0)
                 {
-                    //hooks.Add(LocalHook.Create(SendPacketAddress, new DSendPacket(form.SendPacketHooked), this));
+                    hooks.Add(LocalHook.Create(SendPacketAddress, new DSendPacket(form.SendPacketHooked), this));
                 }
 
                 hooks.Add(LocalHook.Create(DecodeByteAddress, new DDecodeByte(form.DecodeByteHooked), this));
@@ -106,6 +109,7 @@ namespace MapleStoryHooks
                 hooks.Add(LocalHook.Create(DecodeIntAddress, new DDecodeInt(form.DecodeIntHooked), this));
                 hooks.Add(LocalHook.Create(DecodeBufferAddress, new DDecodeBuffer(form.DecodeBufferHooked), this));
                 hooks.Add(LocalHook.Create(DecodeStringAddress, new DDecodeString(form.DecodeStringHooked), this));
+                //hooks.Add(LocalHook.Create(DecryptDataAddress, new DDecryptData(form.DecryptDataHooked), this));
 
                 hooks.ForEach(hook => hook.ThreadACL.SetExclusiveACL(new Int32[] { 0 }));
 
@@ -179,6 +183,7 @@ namespace MapleStoryHooks
             Interface.WriteConsole("R INT " + scanner.FindPatternAsHex(DecodeIntPattern, 0));
             Interface.WriteConsole("R BUFFER " + scanner.FindPatternAsHex(DecodeBufferPattern, 0));
             Interface.WriteConsole("R STRING " + scanner.FindPatternAsHex(DecodeStringPattern, 0));
+            //Interface.WriteConsole("RECV PACKET " + scanner.FindPatternAsHex(DecryptDataPattern, 0));
         }
 
         #region Delegates
@@ -217,6 +222,9 @@ namespace MapleStoryHooks
 
         [UnmanagedFunctionPointer(CallingConvention.ThisCall, SetLastError = true)]
         public delegate IntPtr DDecodeString(IntPtr @this, IntPtr resultPointer);
+
+        [UnmanagedFunctionPointer(CallingConvention.ThisCall, SetLastError = true)]
+        public delegate int DDecryptData(IntPtr @this, int dwKey);
         #endregion
 
     }

@@ -19,8 +19,12 @@ namespace MapleStoryHooks
             timer1.Start();
         }
 
+        public static readonly int MAX_PACKETS = 1000;
+
         public MaplePacket CurrentPacket { get; set; }
         public DateTime CurrentTime { get; set; }
+
+        
 
         public delegate void DPacketFinished(MaplePacket packet);
 
@@ -53,13 +57,19 @@ namespace MapleStoryHooks
                     try
                     {
                         listView1.Items.Add(new ListViewItem(new string[] { packet.Direction, packet.ToArray().Length.ToString(), BitConverter.ToString(packet.ToArray()) }));
-                        listView2.Items.Add(new ListViewItem(new string[] { packet.Direction, opcode, data }));
+                        //listView2.Items.Add(new ListViewItem(new string[] { packet.Direction, opcode, data }));
                     }
                     catch (Exception e)
                     {
                         Main.Interface.WriteConsole("Packet_Finished Error: " + e.StackTrace + "\r\n" + e.Message);
                     }
                 }
+            }
+
+            if (listView1.Items.Count > MAX_PACKETS)
+            {
+                listView1.Items.RemoveAt(0);
+                //listView2.Items.RemoveAt(0);
             }
         }
 
@@ -227,6 +237,13 @@ namespace MapleStoryHooks
 
             return Main.DecodeStringOriginal(@this, resultPointer);
         }
+
+        //public int DecryptDataHooked(IntPtr @this, int dwKey)
+        //{
+        //int result = Main.DecrypDataOriginal(@this, dwKey);
+        //return result;
+        //}
+
         #endregion
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -235,10 +252,15 @@ namespace MapleStoryHooks
             {
                 MaplePacket oldPacket = CurrentPacket;
                 this.Invoke(new DPacketFinished(OnPacketFinished), oldPacket);
-                Main.Interface.WriteConsole("Add Packet From Timer");
                 CurrentPacket = null;
                 CurrentTime = DateTime.Now;
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            listView1.Items.Clear();
+            listView2.Items.Clear();
         }
     } 
 }
