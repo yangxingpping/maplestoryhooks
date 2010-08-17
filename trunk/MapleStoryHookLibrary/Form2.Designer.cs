@@ -41,12 +41,18 @@
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.settingsTabPage = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.button1 = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.plainLogTabPage.SuspendLayout();
             this.formattedLogTabPage.SuspendLayout();
             this.settingsTabPage.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -89,8 +95,8 @@
             // 
             // columnHeader1
             // 
-            this.columnHeader1.Text = "Direction";
-            this.columnHeader1.Width = 75;
+            this.columnHeader1.Text = "Dir.";
+            this.columnHeader1.Width = 40;
             // 
             // columnHeader2
             // 
@@ -120,6 +126,7 @@
             this.columnHeader5,
             this.columnHeader6});
             this.listView2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listView2.FullRowSelect = true;
             this.listView2.Location = new System.Drawing.Point(3, 3);
             this.listView2.Name = "listView2";
             this.listView2.Size = new System.Drawing.Size(685, 407);
@@ -129,8 +136,8 @@
             // 
             // columnHeader4
             // 
-            this.columnHeader4.Text = "Direction";
-            this.columnHeader4.Width = 75;
+            this.columnHeader4.Text = "Dir.";
+            this.columnHeader4.Width = 40;
             // 
             // columnHeader5
             // 
@@ -144,34 +151,73 @@
             // 
             // settingsTabPage
             // 
-            this.settingsTabPage.Controls.Add(this.label1);
+            this.settingsTabPage.BackColor = System.Drawing.Color.Silver;
+            this.settingsTabPage.Controls.Add(this.groupBox1);
             this.settingsTabPage.Location = new System.Drawing.Point(4, 23);
             this.settingsTabPage.Name = "settingsTabPage";
             this.settingsTabPage.Padding = new System.Windows.Forms.Padding(3);
             this.settingsTabPage.Size = new System.Drawing.Size(691, 413);
             this.settingsTabPage.TabIndex = 2;
             this.settingsTabPage.Text = "Settings";
-            this.settingsTabPage.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.textBox1);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Location = new System.Drawing.Point(8, 51);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(664, 100);
+            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Packet Settings";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(23, 28);
+            this.label1.Location = new System.Drawing.Point(20, 39);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(210, 14);
+            this.label1.Size = new System.Drawing.Size(91, 14);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Sorry, there are no settings.";
+            this.label1.Text = "Max Packets:";
             // 
             // timer1
             // 
             this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(4, 3);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(119, 23);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "Clear Packets";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.button1);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(0, 411);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(699, 29);
+            this.panel1.TabIndex = 2;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(117, 36);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 22);
+            this.textBox1.TabIndex = 1;
+            this.textBox1.Text = "TESTING";
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(699, 440);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.tabControl1);
             this.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "Form2";
@@ -180,7 +226,9 @@
             this.plainLogTabPage.ResumeLayout(false);
             this.formattedLogTabPage.ResumeLayout(false);
             this.settingsTabPage.ResumeLayout(false);
-            this.settingsTabPage.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -199,7 +247,11 @@
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.ColumnHeader columnHeader6;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
