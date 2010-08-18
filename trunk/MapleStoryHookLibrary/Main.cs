@@ -22,14 +22,13 @@ namespace MapleStoryHooks
         internal static DEncodeInt EncodeIntOriginal;
         internal static DEncodeBuffer EncodeBufferOriginal;
         internal static DEncodeString EncodeStringOriginal;
-        internal static DSendPacket SendPacketOriginal;
+        //internal static DSendPacket SendPacketOriginal;
 
         internal static DDecodeByte DecodeByteOriginal;
         internal static DDecodeShort DecodeShortOriginal;
         internal static DDecodeInt DecodeIntOriginal;
         internal static DDecodeBuffer DecodeBufferOriginal;
         internal static DDecodeString DecodeStringOriginal;
-        //internal static DRecvPacket DecrypDataOriginal;
         
         #endregion
 
@@ -40,7 +39,7 @@ namespace MapleStoryHooks
         internal static readonly string EncodeIntPattern = "56 8B F1 6A 04 E8 ?? ?? ?? ?? 8B 4E 08 8B 46 04";
         internal static readonly string EncodeBufferPattern = "56 57 8B 7C 24 10 8B F1 57 ?? ?? ?? ?? ?? 8B 46 04 03 46 08 57 FF 74 24 10 50 ?? ?? ?? ?? ?? 01 7E 08 83 C4 0C 5F 5E C2 08 00";
         internal static readonly string EncodeStringPattern = "B8 ?? ?? ?? 00 E8 ?? ?? ?? 00 51 56 8B F1 8B 45 08 83 65 FC 00 85 C0 74 05 8B 40 FC EB 02 33 C0 83 C0 02 50 8B CE E8 ?? ?? ?? ?? 8B 46 04 03 46 08 50 51 8D 45 08 8B CC 89 65 F0 50 E8 ?? ?? ?? ?? E8 ?? ?? ?? ?? 01 46 08 83 4D FC FF 59 59 8D 4D 08 E8 ?? ?? ?? ?? 8B 4D F4 64 89 0D 00 00 00 00 5E C9 C2 04 00";
-        internal static readonly string SendPacketPattern = "B8 ?? ?? ?? 00 E8 ?? ?? ?? 00 51 56 57 8B F9 8D 77 ?? 8B CE 89 ?? ?? E8 ?? ?? ?? ?? 8B 47";
+        //internal static readonly string SendPacketPattern = "B8 ?? ?? ?? 00 E8 ?? ?? ?? 00 51 56 57 8B F9 8D 77 ?? 8B CE 89 ?? ?? E8 ?? ?? ?? ?? 8B 47";
 
         internal static readonly string DecodeBytePattern = "55 8B EC 51 8B 51 14 8B 41 08 56 0F B7 71 0C 2B F2 03 C2 83 FE 01 5E 73 15 ?? ?? ?? ?? ?? 8D 45 FC 50 C7 45 FC 26 00 00 00 ?? ?? ?? ?? ?? 8A 00 42 89 51 14 C9 C3";
         internal static readonly string DecodeShortPattern = "55 8B EC 51 8B 51 14 8B 41 08 56 0F B7 71 0C 2B F2 03 C2 83 FE 02 5E 73 15 ?? ?? ?? ?? ?? 8D 45 FC 50 C7 45 FC 26 00 00 00 ?? ?? ?? ?? ?? 66 8B 00 83 C2 02 89 51 14 C9 C3";
@@ -57,7 +56,7 @@ namespace MapleStoryHooks
         internal static IntPtr EncodeIntAddress;
         internal static IntPtr EncodeBufferAddress;
         internal static IntPtr EncodeStringAddress;
-        internal static IntPtr SendPacketAddress;
+        //internal static IntPtr SendPacketAddress;
 
         internal static IntPtr DecodeByteAddress;
         internal static IntPtr DecodeShortAddress;
@@ -66,8 +65,6 @@ namespace MapleStoryHooks
         internal static IntPtr DecodeStringAddress;
         //internal static IntPtr DecryptDataAddress;
         #endregion
-
-        internal Form2 form = new Form2();
 
         public Main(RemoteHooking.IContext InContext, String InChannelName)
         {
@@ -92,30 +89,31 @@ namespace MapleStoryHooks
 
                 hooks = new List<LocalHook>();
 
-                hooks.Add(LocalHook.Create(OutPacketInitAddress, new DOutPacketInit(form.OutPacketInitHooked), this));
-                hooks.Add(LocalHook.Create(EncodeByteAddress, new DEncodeByte(form.EncodeByteHooked), this));
-                hooks.Add(LocalHook.Create(EncodeShortAddress, new DEncodeShort(form.EncodeShortHooked), this));
-                hooks.Add(LocalHook.Create(EncodeIntAddress, new DEncodeInt(form.EncodeIntHooked), this));
-                hooks.Add(LocalHook.Create(EncodeBufferAddress, new DEncodeBuffer(form.EncodeBufferHooked), this));
-                hooks.Add(LocalHook.Create(EncodeStringAddress, new DEncodeString(form.EncodeStringHooked), this));
+                hooks.Add(LocalHook.Create(EncodeByteAddress, new DEncodeByte(EncodeByteHooked), this));
+                hooks.Add(LocalHook.Create(EncodeShortAddress, new DEncodeShort(EncodeShortHooked), this));
+                hooks.Add(LocalHook.Create(EncodeIntAddress, new DEncodeInt(EncodeIntHooked), this));
+                hooks.Add(LocalHook.Create(EncodeBufferAddress, new DEncodeBuffer(EncodeBufferHooked), this));
+                hooks.Add(LocalHook.Create(EncodeStringAddress, new DEncodeString(EncodeStringHooked), this));
 
-                if (SendPacketAddress.ToInt32() > 0)
-                {
-                    hooks.Add(LocalHook.Create(SendPacketAddress, new DSendPacket(form.SendPacketHooked), this));
-                }
+                //if (SendPacketAddress.ToInt32() > 0)
+                //{
+                //    hooks.Add(LocalHook.Create(SendPacketAddress, new DSendPacket(SendPacketHooked), this));
+                //}
 
-                hooks.Add(LocalHook.Create(DecodeByteAddress, new DDecodeByte(form.DecodeByteHooked), this));
-                hooks.Add(LocalHook.Create(DecodeShortAddress, new DDecodeShort(form.DecodeShortHooked), this));
-                hooks.Add(LocalHook.Create(DecodeIntAddress, new DDecodeInt(form.DecodeIntHooked), this));
-                hooks.Add(LocalHook.Create(DecodeBufferAddress, new DDecodeBuffer(form.DecodeBufferHooked), this));
-                hooks.Add(LocalHook.Create(DecodeStringAddress, new DDecodeString(form.DecodeStringHooked), this));
-                //hooks.Add(LocalHook.Create(DecryptDataAddress, new DDecryptData(form.DecryptDataHooked), this));
+                hooks.Add(LocalHook.Create(DecodeByteAddress, new DDecodeByte(DecodeByteHooked), this));
+                hooks.Add(LocalHook.Create(DecodeShortAddress, new DDecodeShort(DecodeShortHooked), this));
+                hooks.Add(LocalHook.Create(DecodeIntAddress, new DDecodeInt(DecodeIntHooked), this));
+                hooks.Add(LocalHook.Create(DecodeBufferAddress, new DDecodeBuffer(DecodeBufferHooked), this));
+                hooks.Add(LocalHook.Create(DecodeStringAddress, new DDecodeString(DecodeStringHooked), this));
 
                 hooks.ForEach(hook => hook.ThreadACL.SetExclusiveACL(new Int32[] { 0 }));
 
                 Interface.WriteConsole("Initialized Hooks: " + hooks.Count);
-                
-                form.ShowDialog();
+
+                while (true)
+                {
+                    Thread.Sleep(500);
+                }
 
             }
             catch (Exception e)
@@ -135,7 +133,7 @@ namespace MapleStoryHooks
             EncodeIntAddress = scanner.FindPattern(EncodeIntPattern, 0);
             EncodeBufferAddress = scanner.FindPattern(EncodeBufferPattern, 0);
             EncodeStringAddress = scanner.FindPattern(EncodeStringPattern, 0);
-            SendPacketAddress = scanner.FindPattern(SendPacketPattern, 0);
+            
             DecodeByteAddress = scanner.FindPattern(DecodeBytePattern, 0);
             DecodeShortAddress = scanner.FindPattern(DecodeShortPattern, 0);
             DecodeIntAddress = scanner.FindPattern(DecodeIntPattern, 0);
@@ -152,12 +150,6 @@ namespace MapleStoryHooks
             EncodeIntOriginal = (DEncodeInt)Marshal.GetDelegateForFunctionPointer(EncodeIntAddress, typeof(DEncodeInt));
             EncodeBufferOriginal = (DEncodeBuffer)Marshal.GetDelegateForFunctionPointer(EncodeBufferAddress, typeof(DEncodeBuffer));
             EncodeStringOriginal = (DEncodeString)Marshal.GetDelegateForFunctionPointer(EncodeStringAddress, typeof(DEncodeString));
-
-            if (SendPacketAddress.ToInt32() > 0)
-            {
-                //SendPacketOriginal = (DSendPacket)Marshal.GetDelegateForFunctionPointer(SendPacketAddress, typeof(DSendPacket));
-            }
-            
 
             DecodeByteOriginal = (DDecodeByte)Marshal.GetDelegateForFunctionPointer(DecodeByteAddress, typeof(DDecodeByte));
             DecodeShortOriginal = (DDecodeShort)Marshal.GetDelegateForFunctionPointer(DecodeShortAddress, typeof(DDecodeShort));
@@ -176,14 +168,106 @@ namespace MapleStoryHooks
             Interface.WriteConsole("S INT " + scanner.FindPatternAsHex(EncodeIntPattern, 0));
             Interface.WriteConsole("S BUFFER " + scanner.FindPatternAsHex(EncodeBufferPattern, 0));
             Interface.WriteConsole("S STRING " + scanner.FindPatternAsHex(EncodeStringPattern, 0));
-            Interface.WriteConsole("SEND PACKET " + scanner.FindPatternAsHex(SendPacketPattern, 0));
 
             Interface.WriteConsole("R BYTE " + scanner.FindPatternAsHex(DecodeBytePattern, 0));
             Interface.WriteConsole("R SHORT " + scanner.FindPatternAsHex(DecodeShortPattern, 0));
             Interface.WriteConsole("R INT " + scanner.FindPatternAsHex(DecodeIntPattern, 0));
             Interface.WriteConsole("R BUFFER " + scanner.FindPatternAsHex(DecodeBufferPattern, 0));
             Interface.WriteConsole("R STRING " + scanner.FindPatternAsHex(DecodeStringPattern, 0));
-            //Interface.WriteConsole("RECV PACKET " + scanner.FindPatternAsHex(DecryptDataPattern, 0));
+        }
+
+        public void EncodeByteHooked(IntPtr @this, byte n)
+        {
+            Interface.AddByte(@this.ToInt32(), n, true);
+
+            EncodeByteOriginal(@this, n);
+        }
+
+        public void EncodeShortHooked(IntPtr @this, Int16 n)
+        {
+            Interface.AddShort(@this.ToInt32(), n, true);
+
+            EncodeShortOriginal(@this, n);
+        }
+
+        public void EncodeIntHooked(IntPtr @this, Int32 n)
+        {
+            Interface.AddInt(@this.ToInt32(), n, true);
+
+            EncodeIntOriginal(@this, n);
+        }
+
+        public void EncodeBufferHooked(IntPtr @this, IntPtr bufferPointer, UInt32 uSize)
+        {
+            byte[] data = new byte[uSize];
+            Marshal.Copy(bufferPointer, data, 0, (int)uSize);
+
+            Interface.AddBuffer(@this.ToInt32(), data, true);
+
+            EncodeBufferOriginal(@this, bufferPointer, uSize);
+        }
+
+        public void EncodeStringHooked(IntPtr @this, IntPtr stringPointer)
+        {
+            string s = Marshal.PtrToStringAnsi(stringPointer);
+
+            Interface.AddString(@this.ToInt32(), s, true);
+
+            EncodeStringOriginal(@this, stringPointer);
+        }
+
+        public byte DecodeByteHooked(IntPtr @this)
+        {
+            CInPacket packet = (CInPacket)Marshal.PtrToStructure(@this, typeof(CInPacket));
+            byte result = packet.ToReader().ReadByte();
+
+            Interface.AddByte(@this.ToInt32(), result, false);
+
+            return DecodeByteOriginal(@this);
+        }
+
+        public UInt16 DecodeShortHooked(IntPtr @this)
+        {
+            CInPacket packet = (CInPacket)Marshal.PtrToStructure(@this, typeof(CInPacket));
+            short result = packet.ToReader().ReadInt16();
+
+            Interface.AddShort(@this.ToInt32(), result, false);
+
+            return DecodeShortOriginal(@this);
+        }
+
+        public UInt32 DecodeIntHooked(IntPtr @this)
+        {
+            CInPacket packet = (CInPacket)Marshal.PtrToStructure(@this, typeof(CInPacket));
+            int result = packet.ToReader().ReadInt32();
+
+            Interface.AddInt(@this.ToInt32(), result, false);
+
+            return DecodeIntOriginal(@this);
+        }
+
+        public void DecodeBufferHooked(IntPtr @this, IntPtr bufferPointer, UInt32 uSize)
+        {
+            CInPacket packet = (CInPacket)Marshal.PtrToStructure(@this, typeof(CInPacket));
+            byte[] result = packet.ToReader().ReadBytes((int)uSize);
+
+            Interface.AddBuffer(@this.ToInt32(), result, false);
+
+            DecodeBufferOriginal(@this, bufferPointer, uSize);
+        }
+
+        public IntPtr DecodeStringHooked(IntPtr @this, IntPtr resultPointer)
+        {
+            CInPacket packet = (CInPacket)Marshal.PtrToStructure(@this, typeof(CInPacket));
+            BinaryReader reader = packet.ToReader();
+            int length = reader.ReadInt16();
+            string result = Encoding.ASCII.GetString(reader.ReadBytes(length));
+
+            reader.Close(); // Should close all other readers????
+
+            Interface.AddString(@this.ToInt32(), result, false);
+
+            return DecodeStringOriginal(@this, resultPointer);
         }
 
         #region Delegates
@@ -222,9 +306,6 @@ namespace MapleStoryHooks
 
         [UnmanagedFunctionPointer(CallingConvention.ThisCall, SetLastError = true)]
         public delegate IntPtr DDecodeString(IntPtr @this, IntPtr resultPointer);
-
-        [UnmanagedFunctionPointer(CallingConvention.ThisCall, SetLastError = true)]
-        public delegate int DDecryptData(IntPtr @this, int dwKey);
         #endregion
 
     }
