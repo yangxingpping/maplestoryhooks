@@ -5,7 +5,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.IO;
 
-namespace MapleStoryHooks
+namespace MapleStoryHookss
 {
     public class MaplePacket
     {
