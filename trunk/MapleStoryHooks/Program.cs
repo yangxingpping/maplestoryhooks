@@ -31,7 +31,7 @@ namespace MapleStoryHooks
 
         static void Main(string[] args)
         {
-            Console.WriteLine("MapleStory Hooksss");
+            Console.WriteLine("MapleStory Hooks");
             Console.WriteLine();
             Console.WriteLine("Input process name...");
             
