@@ -101,7 +101,7 @@ namespace MapleStoryHooks
 
                 if (SendPacketAddress.ToInt32() > 0)
                 {
-                    hooks.Add(LocalHook.Create(SendPacketAddress, new DSendPacket(form.SendPacketHooked), this));
+                    //hooks.Add(LocalHook.Create(SendPacketAddress, new DSendPacket(form.SendPacketHooked), this));
                 }
 
                 hooks.Add(LocalHook.Create(DecodeByteAddress, new DDecodeByte(form.DecodeByteHooked), this));
