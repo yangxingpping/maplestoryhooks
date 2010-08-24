@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.Win32.SafeHandles;
+using System.IO;
 
 namespace MapleStoryHooks
 {
@@ -69,6 +70,12 @@ namespace MapleStoryHooks
             {
                 return false;
             }
+        }
+
+        public void DumpMemoryToFile(string pPath)
+        {
+            DumpMemory();
+            File.WriteAllBytes(pPath, mBuffer);
         }
 
         private bool MaskCheck(int nOffset, string pattern)
